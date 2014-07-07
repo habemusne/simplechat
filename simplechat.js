@@ -68,7 +68,17 @@ if (Meteor.isClient) {
  
   //////////// Chat ///////////////
   Template.chat.messages = function () {
-    return Messages.find({}, {sort:{timestamp:-1}, limit:42}).fetch().reverse();
+    var messages = Messages.find({}, {sort:{timestamp:-1}, limit:42}).fetch().reverse();
+    for (var i = messages.length - 1; i >= 0; i--) {
+      var user =  Meteor.users.findOne(messages[i].author);
+      if (user) {
+        messages[i].name = user.profile.name;
+      }
+      else {
+        messages[i].name = "Unknown";
+      }
+    };
+    return messages;
   };
 
   Template.chat.authorname = function(opts) {/*

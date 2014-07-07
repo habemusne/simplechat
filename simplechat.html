@@ -53,8 +53,7 @@
   <div class="chat">
     <div class="conversation" id="scroll">
       {{#each messages }}
-        <p>{{> UI.dynamic template=chat data="ben"}}
-         > {{ message }} </p>
+        <p>{{ name }} > {{ message }} </p>
       {{else}}
         <p> no message </p>
       {{/each}}
