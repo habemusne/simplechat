@@ -51,9 +51,12 @@
 
 <template name="chat">
   <div class="chat">
-    <div class="conversation" id="scroll">
+    <div class="conversation commentArea" id="scroll">
       {{#each messages }}
-        <p>{{ name }} > {{ message }} </p>
+        <div class="bubbledLeft">
+          {{ name }} > {{ message }}
+        </div>
+        <p> </p>
       {{else}}
         <p> no message </p>
       {{/each}}
