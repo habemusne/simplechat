@@ -4,6 +4,10 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-autopublish
 insecure
 bootstrap
+accounts-guest
+accounts-base
+accounts-password
+user-status
+accounts-testing
