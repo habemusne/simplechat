@@ -1,0 +1,73 @@
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>Simple chat</title>
+  </head>
+
+  <body>
+    <!-- Wrap all page content here -->
+    <div class="container">
+      <div class="span3">
+        {{> presentation}}
+      </div>
+      <div class="span6">
+        {{> chat}}        
+      </div>
+      <div class="span3">
+        {{> participants}}
+      </div>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+
+
+<template name="presentation">
+  <h1>SimpleChat</h1>
+  <i>Description</i>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+</template>
+
+<template name="participants">
+  <h3>Participants</h3>
+  <ul>
+    <li>Alice</li>
+    <li>Bob</li>
+    <li>Charlie</li>
+  </ul>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+  <p> Your name : <input type="text" class="form-control" id="nameInput" placeholder="{{name}}" /></p>
+
+</template>
+
+<template name="chat">
+  <div class="chat">
+    <div class="conversation" id="scroll">
+      {{#each messages }}
+        <p>{{ author }} > {{ message }} </p>
+      {{else}}
+        <p> no message </p>
+      {{/each}}
+    </div>
+    <div class="conversationInput">
+      <!-- <input type="text" id="messageInput" class="form-control text" placeholder="Message..." maxlength="300" style="width:100%;padding:0;margin:0;">-->
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    window.setInterval(function() { /* Ugly but for now ...*/ 
+      var elem = document.getElementById('scroll');
+      elem.scrollTop = elem.scrollHeight;
+    }, 5000);
+  </script>
+</template>

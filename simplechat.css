@@ -1,0 +1,21 @@
+@media (min-width: 1200px) {
+    [class*="span"] {
+        margin-left: 20px; /* correction ??? */
+    }
+}
+
+.chat {
+    height: 100vh; /* What is that ? */
+    background-color: #ccc;
+}
+.conversation {
+    height: calc(100% - 50px); /* Use preprocessing to get a fixed .conversationInput-height */
+    overflow-x:hidden;
+    overflow-y: auto;
+}
+.conversationInput {
+    background-color: #ccf;
+    height: 50px;
+    bottom: 0;
+    width: 555px; /* BAD */
+}
