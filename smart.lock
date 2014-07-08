@@ -4,7 +4,8 @@
     "basePackages": {
       "accounts-guest": {},
       "user-status": {},
-      "accounts-testing": {}
+      "accounts-testing": {},
+      "fontawesome4": {}
     },
     "packages": {
       "accounts-guest": {
@@ -22,10 +23,15 @@
         "tag": "v0.1.0",
         "commit": "9dc6839693aced99e11ad66f05851a3cac718d26"
       },
+      "fontawesome4": {
+        "git": "https://github.com/chrismbeckett/meteor-fontawesome4.git",
+        "tag": "v1.1.0",
+        "commit": "7d2cb9119b7981b8f854b7051d302d4842311249"
+      },
       "timesync": {
         "git": "https://github.com/mizzao/meteor-timesync.git",
-        "tag": "v0.2.0",
-        "commit": "55f1daf261996dfbd726253688cfe7a2cc169d9b"
+        "tag": "v0.2.1",
+        "commit": "fa4abd511f4e32a3c5d22795ce2c1e8369428fac"
       }
     }
   }

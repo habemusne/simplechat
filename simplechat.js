@@ -49,6 +49,25 @@ var activateInput = function (input) {
   input.focus();
   input.select();
 };
+
+UI.registerHelper('breaklines', function(text){ // Should call a fonction to sanitaze the html...
+  var html = "";
+  if(text) { 
+    html = text.replace(/(\r\n|\n|\r)/gm, '<br>');
+  }
+  return Spacebars.SafeString(html);
+});
+
+
+// Not the right way to do it ?!!!
+UI.registerHelper('authorCss', function(author){
+  var cssClass = "bubbledLeft";
+  if(author === Meteor.userId()) { 
+    cssClass = "bubbledRight";
+  }
+  return cssClass;
+});
+
 /////////// End Helper ///////
 
 if (Meteor.isClient) {
@@ -78,8 +97,25 @@ if (Meteor.isClient) {
         messages[i].name = "Unknown";
       }
     };
-    return messages;
+
+    var conversations = [];
+    var newConversation = messages[0];
+    for (var i = 0; i <= messages.length - 2; i++) {
+      var timedelta = messages[i+1].timestamp - messages[i].timestamp; 
+      var sameauthor = (messages[i+1].author === messages[i].author);
+      if (timedelta <= 30000 && sameauthor) {
+        newConversation.message = newConversation.message + " \n" + messages[i+1].message;
+      }
+      else {
+        conversations.push(newConversation);
+        newConversation = messages[i+1];
+      }
+    };
+    conversations.push(newConversation);
+    return conversations;
   };
+
+
 
   Template.chat.authorname = function(opts) {/*
     var user =  Meteor.users.findOne(opts.author);
@@ -158,5 +194,7 @@ if (Meteor.isServer) {
       Meteor.users.find({})
     ]
   });
+
+  /* Ici mettre un moyen de clean les olds user qui ne sont plus affiché */
 
 }

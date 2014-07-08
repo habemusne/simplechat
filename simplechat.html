@@ -32,8 +32,15 @@
 
 <template name="presentation">
   <h1>SimpleChat</h1>
-  <i>Description</i>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <dl>
+    <dt>Description</dt>
+    <dd>A chat, easy to use, without any login or plug-in. It just works !!!</dd>
+    <dt>A problem or a suggestion ?</dt>
+    <dd>Contact me at benjamin.derville@utt.fr <br/> or on twitter : @mrbenderv</dd>
+
+  </dl>
+  <i>version : 0.0.1</i><br/>
+  <i>made with meteor 0.8.2</i>
 </template>
 
 <template name="participants">
@@ -43,9 +50,8 @@
       <li>{{ profile.name }} - online ? {{ status.online }}</li>
     {{/each}}
   </ul>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-
-  <p> Your name : <input type="text" class="form-control" id="nameInput" placeholder="{{name}}" /></p>
+  <p>You can edit your name : </p>
+  <input type="text" class="form-control" id="nameInput" placeholder="{{name}}" maxlength="40" />
 
 </template>
 
@@ -53,23 +59,27 @@
   <div class="chat">
     <div class="conversation commentArea" id="scroll">
       {{#each messages }}
-        <div class="bubbledLeft">
-          {{ name }} > {{ message }}
+        <div class="{{authorCss author}}">
+          {{breaklines message }}<br/>
+          <i class="author">{{ name }}</i>
         </div>
         <p> </p>
       {{else}}
         <p> no message </p>
       {{/each}}
     </div>
-    <div class="conversationInput">
-      <input type="text" id="messageInput" class="form-control text" placeholder="Message..." maxlength="300" style="width:100%;padding:0;margin:0;">
+    <div class="conversationInput"> 
+      <input type="text" id="messageInput" class="form-control text" placeholder="Message..." maxlength="300">
     </div>
   </div>
 
 
   <script type="text/javascript">
-    /* We just scroll down at the beginning */
-    var elem = document.getElementById('scroll');
-    elem.scrollTop = elem.scrollHeight;
+    /* We just scroll down at the beginning *//*!!! Do not work !!! */
+    window.onload = function(){
+      var elem = document.getElementById('scroll');
+      elem.scrollTop = elem.scrollHeight;
+    }
   </script>
+
 </template>
