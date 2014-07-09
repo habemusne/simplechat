@@ -71,12 +71,9 @@ UI.registerHelper('authorCss', function(author){
 /////////// End Helper ///////
 
 if (Meteor.isClient) {
-  // Subscribe
-  Meteor.subscribe("chatroom");
-
   // Create collection on client
   Messages = new Meteor.Collection('messages');
-  Channels = new Meteor.Collection('channels');
+  // Channels = new Meteor.Collection('channels'); // not use for now
 
   Meteor.startup(function() {
       Meteor.loginVisitor(); // Guest Account
@@ -127,7 +124,8 @@ if (Meteor.isClient) {
           Messages.insert({
             author: Meteor.userId(),
             message: value,
-            timestamp: (new Date()).getTime()
+            timestamp: (new Date()).getTime(),
+            channel: Session.get('channel') 
           });
           evt.target.value = "";
         }
@@ -147,7 +145,31 @@ if (Meteor.isClient) {
   };
 
   Template.participants.participants = function() {
-    return Meteor.users.find({}).fetch(); // For now, we want _every_ users
+    var labelClass = function(id) { // Certainly not the right way to do it...
+      if (id === Meteor.userId()) {
+        return "#428bca";
+      }
+      var user = Meteor.users.findOne(id);
+      if (user) {
+        if (user.status.online) {
+          return "#5cb85c";
+        }
+        else {
+          return "#f0ad4e";
+        }
+      }
+      else {
+        return '#d9534f';
+      }
+
+    };
+
+    var participants = Meteor.users.find({}).fetch();
+    for (var i = participants.length - 1; i >= 0; i--) {
+      participants[i].labelClass = labelClass(participants[i]._id);
+    };
+
+    return participants;
   }
 
   Template.participants.events(okCancelEvents(
@@ -167,11 +189,6 @@ if (Meteor.isClient) {
 
 
     //////////// Homepage ///////////////
-
-
-
-
-    //////////// END Homepage ///////////
     Template.homepage.events(okCancelEvents(
       '#channelInput',
       {
@@ -186,6 +203,16 @@ if (Meteor.isClient) {
       return Session.get('channel');
     };
 
+    Template.homepage.events({
+      'click #channelButton': function (event, template) {
+        Router.go('/c/'+Session.get('channel'));
+      }
+    }); 
+
+
+
+    //////////// END Homepage ///////////
+
 
     //////////// Routing ///////////////
 
@@ -195,9 +222,14 @@ if (Meteor.isClient) {
   
   Router.map(function () {
     this.route('channel', {
-      path: '/c',
+      path: '/c/:channel',
       template: 'channel',
-      layoutTemplate: 'layout'
+      layoutTemplate: 'layout',
+        waitOn: function () {
+          Session.set('channel', this.params.channel);
+          // Subscribe
+          Meteor.subscribe("chatroom", this.params.channel);
+        }
     });
   
     this.route('home', {
@@ -218,16 +250,16 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Messages = new Meteor.Collection('messages');
-    Channels = new Meteor.Collection('channels');
+    // Channels = new Meteor.Collection('channels'); // not use for now
 
     // code to run on server at startup
 
   });
 
 
-  Meteor.publish("chatroom", function () {
+  Meteor.publish("chatroom", function (channel) {
     var uniqNames = function () {
-      var messages = Messages.find({}, {sort:{timestamp:-1}, limit:42}).fetch();
+      var messages = Messages.find({channel: channel}, {sort:{timestamp:-1}, limit:42}).fetch();
       var listNamesId = _.pluck(messages, 'author');
       var uniqNamesId = _.uniq(listNamesId);
       return uniqNamesId;
@@ -236,8 +268,8 @@ if (Meteor.isServer) {
 
     // console.log(Meteor.users.find({$or: [{_id: {$in: uniqNames() }},{"status.online": true}]}).fetch());
     return [
-      Messages.find({}, {sort:{timestamp:-1}, limit:42}), // Attention DRY !
-      Meteor.users.find({$or: [{_id: {$in: uniqNames()}},{ "status.online" : true}]})
+      Messages.find({channel: channel}, {sort:{timestamp:-1}, limit:42}), // Attention DRY !
+      Meteor.users.find({$or: [{_id: {$in: uniqNames()}},{channel: channel, "status.online" : true}]})
     ]
   });
 

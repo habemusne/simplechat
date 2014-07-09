@@ -40,7 +40,7 @@
     <form class="form-inline" role="form">
       <div class="form-group">
         <input type="text" class="form-control" id="channelInput" placeholder="agoodname" maxlength="20" />
-        <button type="submit" class="btn btn-default">Go !</button>
+        <button type="button" id="channelButton" class="btn btn-default">Go !</button>
       </div>
     </form>
   </div>
@@ -64,7 +64,7 @@
   <h3>Participants</h3>
   <ul>
     {{#each participants}}
-      <li>{{ profile.name }} - online ? {{ status.online }}</li>
+      <li style="list-style-type: none;"><div class="color-swatch" style="background-color:{{labelClass}};"></div> {{ profile.name }}</li>
     {{/each}}
   </ul>
   <p>You can edit your name : </p>
@@ -76,13 +76,18 @@
   <div class="chat">
     <div class="conversation commentArea" id="scroll">
       {{#each messages }}
-        <div class="{{authorCss author}}">
-          {{breaklines message }}<br/>
-          <i class="author">{{ name }}</i>
-        </div>
-        <p> </p>
-      {{else}}
-        <p> no message </p>
+        {{#if message}}
+          <div class="{{authorCss author}}">
+            {{breaklines message }}<br/>
+            <i class="author">{{ name }}</i>
+          </div>
+        {{else}}
+          <div class="bubbledLeft">
+            Hi ! Share the url with your friend<br/>
+            <i class="author">SimpleChat</i>
+          </div>
+        {{/if}}
+
       {{/each}}
     </div>
     <div class="conversationInput"> 
