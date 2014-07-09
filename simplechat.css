@@ -22,7 +22,6 @@ body {
     background-color: #ccf;
     height: 50px;
     bottom: 0;
-    width: 555px; /* BAD */
 }
 
 
@@ -94,7 +93,6 @@ body {
     width: 100%;
     padding: 0px;
     padding-left: 16px;
-    margin: -1px;
     height: 100%;
     border-bottom: 0;
     border-radius: 0;

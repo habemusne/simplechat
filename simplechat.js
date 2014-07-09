@@ -76,12 +76,15 @@ if (Meteor.isClient) {
 
   // Create collection on client
   Messages = new Meteor.Collection('messages');
+  Channels = new Meteor.Collection('channels');
 
   Meteor.startup(function() {
       Meteor.loginVisitor(); // Guest Account
       //Meteor.insecureUserLogin('Anonymous'); // Test Account
       // We take car of the name
       Session.setDefault('name', 'Guest');
+      Session.setDefault('channel', 'agoodname');
+
   });
 
  
@@ -163,13 +166,60 @@ if (Meteor.isClient) {
     //////////// End Name ///////////////
 
 
+    //////////// Homepage ///////////////
+
+
+
+
+    //////////// END Homepage ///////////
+    Template.homepage.events(okCancelEvents(
+      '#channelInput',
+      {
+        ok: function (value, evt) {
+          if (value) {
+            Session.set('channel', value);
+          }
+        }
+      }));
+
+    Template.homepage.channel = function () {
+      return Session.get('channel');
+    };
+
+
+    //////////// Routing ///////////////
+
+  Router.configure({
+    layoutTemplate: 'layout'
+  });
+  
+  Router.map(function () {
+    this.route('channel', {
+      path: '/c',
+      template: 'channel',
+      layoutTemplate: 'layout'
+    });
+  
+    this.route('home', {
+      path: '/',
+      template: 'homepage',
+      layoutTemplate: 'layout'
+    });
+  });
+
+    //////////// END Routing ///////////
 
 
 }
 
+
+
+
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Messages = new Meteor.Collection('messages');
+    Channels = new Meteor.Collection('channels');
+
     // code to run on server at startup
 
   });

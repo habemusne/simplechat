@@ -3,6 +3,8 @@
     "accounts-guest": {},
     "user-status": {},
     "accounts-testing": {},
-    "fontawesome4": {}
+    "fontawesome4": {},
+    "iron-router": {},
+    "bootstrap-3": {}
   }
 }
