@@ -88,6 +88,7 @@ if (Meteor.isClient) {
   //////////// Chat ///////////////
   Template.chat.messages = function () {
     var messages = Messages.find({}, {sort:{timestamp:-1}, limit:42}).fetch().reverse();
+    
     for (var i = messages.length - 1; i >= 0; i--) {
       var user =  Meteor.users.findOne(messages[i].author);
       if (user) {
@@ -115,18 +116,6 @@ if (Meteor.isClient) {
     return conversations;
   };
 
-
-
-  Template.chat.authorname = function(opts) {/*
-    var user =  Meteor.users.findOne(opts.author);
-    if (user) {
-      return Meteor.users.findOne(opts.author).profile.name;
-    }
-    else {
-      return opts.author;
-    }*/
-    return opts.data; // TODO need to fix that
-  }
 
   Template.chat.events(okCancelEvents(
       '#messageInput',
@@ -176,22 +165,29 @@ if (Meteor.isClient) {
 
 
 
-
-
-
-
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Messages = new Meteor.Collection('messages');
     // code to run on server at startup
+
   });
 
+
   Meteor.publish("chatroom", function () {
+    var uniqNames = function () {
+      var messages = Messages.find({}, {sort:{timestamp:-1}, limit:42}).fetch();
+      var listNamesId = _.pluck(messages, 'author');
+      var uniqNamesId = _.uniq(listNamesId);
+      return uniqNamesId;
+    };
+
+
+    // console.log(Meteor.users.find({$or: [{_id: {$in: uniqNames() }},{"status.online": true}]}).fetch());
     return [
-      Messages.find({}),
-      Meteor.users.find({})
+      Messages.find({}, {sort:{timestamp:-1}, limit:42}), // Attention DRY !
+      Meteor.users.find({$or: [{_id: {$in: uniqNames()}},{ "status.online" : true}]})
     ]
   });
 
