@@ -84,10 +84,12 @@ if (Meteor.isClient) {
 
   });
 
+
  
   //////////// Chat ///////////////
   Template.chat.messages = function () {
-    var messages = Messages.find({}, {sort:{timestamp:-1}, limit:42}).fetch().reverse();
+    var messagesCursor = Messages.find({}, {sort:{timestamp:-1}, limit:42});
+    var messages = messagesCursor.fetch().reverse(); // Should use observechnage to avoid over computation ?
     
     for (var i = messages.length - 1; i >= 0; i--) {
       var user =  Meteor.users.findOne(messages[i].author);
@@ -113,6 +115,7 @@ if (Meteor.isClient) {
       }
     };
     conversations.push(newConversation);
+    $.titleAlert("New chat message!", {requireBlur: true});
     return conversations;
   };
 

@@ -87,7 +87,7 @@
             <i class="author">SimpleChat</i>
           </div>
         {{/if}}
-
+        <script> scrolldown(); </script>
       {{/each}}
     </div>
     <div class="conversationInput"> 
@@ -97,8 +97,11 @@
 
 
   <script type="text/javascript">
-    /* We just scroll down at the beginning *//*!!! Do not work !!! */
-    window.onload = function(){
+    /* Call it everytime ? ....
+    around 10 times at the first call...
+     */
+    var scrolldown = function() {
+      console.log("one scrolldown call...");
       var elem = document.getElementById('scroll');
       elem.scrollTop = elem.scrollHeight;
     }
