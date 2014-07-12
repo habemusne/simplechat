@@ -87,7 +87,7 @@
             <i class="author">SimpleChat</i>
           </div>
         {{/if}}
-        <script> scrolldown(); </script>
+        <script> if (typeof(scrolldown) == "function") { scrolldown(); }</script>
       {{/each}}
     </div>
     <div class="conversationInput"> 
@@ -101,7 +101,7 @@
     around 10 times at the first call...
      */
     var scrolldown = function() {
-      console.log("one scrolldown call...");
+      console.log("one scrolldown call..."); // reminder to debug...
       var elem = document.getElementById('scroll');
       elem.scrollTop = elem.scrollHeight;
     }

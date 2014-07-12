@@ -73,7 +73,7 @@ UI.registerHelper('authorCss', function(author){
 if (Meteor.isClient) {
   // Create collection on client
   Messages = new Meteor.Collection('messages');
-  // Channels = new Meteor.Collection('channels'); // not use for now
+  Channels = new Meteor.Collection('channels');
 
   Meteor.startup(function() {
       Meteor.loginVisitor(); // Guest Account
@@ -115,6 +115,7 @@ if (Meteor.isClient) {
       }
     };
     conversations.push(newConversation);
+    // title bar alert 
     $.titleAlert("New chat message!", {requireBlur: true});
     return conversations;
   };
@@ -231,7 +232,16 @@ if (Meteor.isClient) {
         waitOn: function () {
           Session.set('channel', this.params.channel);
           // Subscribe
-          Meteor.subscribe("chatroom", this.params.channel);
+          Meteor.subscribe("chatroomMessages", this.params.channel);
+          Meteor.subscribe("channels", this.params.channel);
+        },
+        data: function() {
+          var channel = Channels.findOne({name: this.params.channel});
+          var participants = [Meteor.userId()]; // default;
+          if (channel) {
+            var participants  = channel.participants;
+          }
+          Meteor.subscribe("users", participants);
         }
     });
   
@@ -253,29 +263,42 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Messages = new Meteor.Collection('messages');
-    // Channels = new Meteor.Collection('channels'); // not use for now
+    Channels = new Meteor.Collection('channels');
 
     // code to run on server at startup
 
   });
 
+  Meteor.publish("channels", function (channel) {
+    var id;
+    if (Channels.findOne({name:channel}) == null) {
+      id = Channels.insert({
+        name : channel,
+        created_timestamp : (new Date()).getTime(),
+        created_author: this.userId,
+        participants: [],
+        message : 0
+      });
+    } else {
+      id = Channels.findOne({name:channel})._id;
+    }
 
-  Meteor.publish("chatroom", function (channel) {
-    var uniqNames = function () {
-      var messages = Messages.find({channel: channel}, {sort:{timestamp:-1}, limit:42}).fetch();
-      var listNamesId = _.pluck(messages, 'author');
-      var uniqNamesId = _.uniq(listNamesId);
-      return uniqNamesId;
-    };
-
-
-    // console.log(Meteor.users.find({$or: [{_id: {$in: uniqNames() }},{"status.online": true}]}).fetch());
-    return [
-      Messages.find({channel: channel}, {sort:{timestamp:-1}, limit:42}), // Attention DRY !
-      Meteor.users.find({$or: [{_id: {$in: uniqNames()}},{channel: channel, "status.online" : true}]})
-    ]
+    if (id) {
+      Channels.update({_id: id}, {$addToSet: { participants: this.userId}});
+    }
+    return Channels.find({});
   });
 
-  /* Ici mettre un moyen de clean les olds user qui ne sont plus affiché */
+
+
+  Meteor.publish("users", function (listUsers) {
+    return Meteor.users.find({_id: {$in: listUsers}});
+  });
+
+
+  Meteor.publish("chatroomMessages", function (channel) {
+    return Messages.find({channel: channel}, {sort:{timestamp:-1}, limit:42});   
+  });
+
 
 }

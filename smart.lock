@@ -9,7 +9,8 @@
       "iron-router": {},
       "bootstrap-3": {},
       "fast-render": {},
-      "jquery-titlealert": {}
+      "jquery-titlealert": {},
+      "related": {}
     },
     "packages": {
       "accounts-guest": {
@@ -52,6 +53,11 @@
         "tag": "v0.0.2",
         "commit": "b258f2d34d8e8d3b1040414f81e9bc7b7be9bca1"
       },
+      "related": {
+        "git": "https://github.com/peerlibrary/meteor-related.git",
+        "tag": "v0.1.2",
+        "commit": "8908b5efc39afeb3988210792b72ca593a2da735"
+      },
       "timesync": {
         "git": "https://github.com/mizzao/meteor-timesync.git",
         "tag": "v0.2.1",
@@ -61,6 +67,11 @@
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "tag": "v0.2.4",
         "commit": "b40e9b0612329288d75cf52ad14a7da64bb8618f"
+      },
+      "assert": {
+        "git": "https://github.com/peerlibrary/meteor-assert.git",
+        "tag": "v0.2.4",
+        "commit": "e81fb4ac29a621eafbd99e63660048a3c827c0fb"
       }
     }
   }
