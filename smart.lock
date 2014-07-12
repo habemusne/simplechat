@@ -20,8 +20,8 @@
       },
       "user-status": {
         "git": "https://github.com/mizzao/meteor-user-status.git",
-        "tag": "v0.5.0",
-        "commit": "6a096fd9f3a916887c92cb778040ce2f8a9cc554"
+        "tag": "v0.6.0",
+        "commit": "dba80d742522ac104f2155f1db852922e4249f96"
       },
       "accounts-testing": {
         "git": "https://github.com/mizzao/meteor-accounts-testing.git",
