@@ -207,11 +207,15 @@ if (Meteor.isClient) {
       return Session.get('channel');
     };
 
+    Template.homepage.channels = function() {
+      return Channels.find({}, {limit:42});
+    }
+
     Template.homepage.events({
       'click #channelButton': function (event, template) {
         Router.go('/c/'+Session.get('channel'));
       }
-    }); 
+    });
 
 
 
@@ -248,7 +252,10 @@ if (Meteor.isClient) {
     this.route('home', {
       path: '/',
       template: 'homepage',
-      layoutTemplate: 'layout'
+      layoutTemplate: 'layout',
+      data: function() {
+        Meteor.subscribe("channelslist");
+      }
     });
   });
 
@@ -267,6 +274,10 @@ if (Meteor.isServer) {
 
     // code to run on server at startup
 
+  });
+
+  Meteor.publish("channelslist", function() {
+    return Channels.find({});
   });
 
   Meteor.publish("channels", function (channel) {
