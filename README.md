@@ -1,0 +1,4 @@
+simplechat
+==========
+
+Simple meteor chat.
